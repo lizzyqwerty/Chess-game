@@ -1,0 +1,322 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #5f826b; font-style: italic;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">class </span><span class="s1">ChessPiece</span><span class="s2">:</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">color </span><span class="s2">= </span><span class="s1">color</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">position </span><span class="s2">= </span><span class="s1">position</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">' '</span>
+
+    <span class="s0">def </span><span class="s1">move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">):</span>
+        <span class="s4"># Метод для перемещения фигур</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">position </span><span class="s2">= </span><span class="s1">new_position</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s4"># Проверяет, может ли фигура так ходить</span>
+        <span class="s4"># Будет переопределен в дочерних классах</span>
+        <span class="s0">raise </span><span class="s1">NotImplementedError</span><span class="s2">(</span><span class="s3">'Метод должен быть переопределен'</span><span class="s2">)</span>
+
+<span class="s0">class </span><span class="s1">Pawn</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'P' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'p'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли пешка так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s1">direction </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">self</span><span class="s2">.</span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1  </span><span class="s4"># Направление движения пешки</span>
+
+        <span class="s4"># Ход вперед на одну клетку</span>
+        <span class="s0">if </span><span class="s1">current_col </span><span class="s2">== </span><span class="s1">new_col </span><span class="s0">and </span><span class="s1">new_row </span><span class="s2">== </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">direction</span><span class="s2">:</span>
+            <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">) </span><span class="s0">is None</span><span class="s2">:</span>
+                <span class="s0">return True</span>
+
+        <span class="s4"># Первый ход на две клетки</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">current_col </span><span class="s2">== </span><span class="s1">new_col </span><span class="s0">and </span><span class="s1">new_row </span><span class="s2">== </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s6">2 </span><span class="s2">* </span><span class="s1">direction</span><span class="s2">) </span><span class="s0">and </span><span class="s2">(</span>
+                <span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">and </span><span class="s1">current_row </span><span class="s2">== </span><span class="s6">6</span><span class="s2">) </span><span class="s0">or</span>
+                <span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">color </span><span class="s2">== </span><span class="s3">'black' </span><span class="s0">and </span><span class="s1">current_row </span><span class="s2">== </span><span class="s6">1</span><span class="s2">)</span>
+        <span class="s2">):</span>
+            <span class="s1">intermediate_row </span><span class="s2">= </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">direction</span>
+            <span class="s1">intermediate_position </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s1">intermediate_row</span><span class="s2">, </span><span class="s1">current_col</span><span class="s2">)</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">board</span><span class="s2">.</span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">intermediate_position</span><span class="s2">) </span><span class="s0">is None and</span>
+                    <span class="s1">board</span><span class="s2">.</span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">) </span><span class="s0">is None</span><span class="s2">):</span>
+                <span class="s0">return True</span>
+
+        <span class="s4"># Взятие фигуры по диагонали</span>
+        <span class="s0">if </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_col </span><span class="s2">- </span><span class="s1">current_col</span><span class="s2">) == </span><span class="s6">1 </span><span class="s0">and </span><span class="s1">new_row </span><span class="s2">== </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">direction</span><span class="s2">:</span>
+            <span class="s1">target_piece </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+            <span class="s0">if </span><span class="s1">target_piece </span><span class="s0">is not None and </span><span class="s1">target_piece</span><span class="s2">.</span><span class="s1">color </span><span class="s2">!= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">color</span><span class="s2">:</span>
+                <span class="s0">return True</span>
+
+        <span class="s0">return False</span>
+
+
+<span class="s0">class </span><span class="s1">Rook</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'R' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'r'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли ладья так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s0">if </span><span class="s1">current_row </span><span class="s2">== </span><span class="s1">new_row</span><span class="s2">:  </span><span class="s4"># Ход по горизонтали</span>
+            <span class="s1">step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_col </span><span class="s2">&gt; </span><span class="s1">current_col </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s0">for </span><span class="s1">col </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">current_col </span><span class="s2">+ </span><span class="s1">step</span><span class="s2">, </span><span class="s1">new_col</span><span class="s2">, </span><span class="s1">step</span><span class="s2">):</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">current_row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+            <span class="s0">return True</span>
+        <span class="s0">elif </span><span class="s1">current_col </span><span class="s2">== </span><span class="s1">new_col</span><span class="s2">:  </span><span class="s4"># Ход по вертикали</span>
+            <span class="s1">step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_row </span><span class="s2">&gt; </span><span class="s1">current_row </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s0">for </span><span class="s1">row </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">step</span><span class="s2">, </span><span class="s1">new_row</span><span class="s2">, </span><span class="s1">step</span><span class="s2">):</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">current_col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+            <span class="s0">return True</span>
+        <span class="s0">return False</span>
+
+
+
+<span class="s0">class </span><span class="s1">Knight</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'N' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'n'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли конь так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s1">row_diff </span><span class="s2">= </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_row </span><span class="s2">- </span><span class="s1">current_row</span><span class="s2">)</span>
+        <span class="s1">col_diff </span><span class="s2">= </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_col </span><span class="s2">- </span><span class="s1">current_col</span><span class="s2">)</span>
+        <span class="s0">return </span><span class="s2">(</span><span class="s1">row_diff </span><span class="s2">== </span><span class="s6">2 </span><span class="s0">and </span><span class="s1">col_diff </span><span class="s2">== </span><span class="s6">1</span><span class="s2">) </span><span class="s0">or </span><span class="s2">(</span><span class="s1">row_diff </span><span class="s2">== </span><span class="s6">1 </span><span class="s0">and </span><span class="s1">col_diff </span><span class="s2">== </span><span class="s6">2</span><span class="s2">)</span>
+
+
+<span class="s0">class </span><span class="s1">Bishop</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'B' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'b'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли слон так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s0">if </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_row </span><span class="s2">- </span><span class="s1">current_row</span><span class="s2">) == </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_col </span><span class="s2">- </span><span class="s1">current_col</span><span class="s2">):</span>
+            <span class="s1">row_step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_row </span><span class="s2">&gt; </span><span class="s1">current_row </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s1">col_step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_col </span><span class="s2">&gt; </span><span class="s1">current_col </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s1">row</span><span class="s2">, </span><span class="s1">col </span><span class="s2">= </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">row_step</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">+ </span><span class="s1">col_step</span>
+            <span class="s0">while </span><span class="s1">row </span><span class="s2">!= </span><span class="s1">new_row </span><span class="s0">and </span><span class="s1">col </span><span class="s2">!= </span><span class="s1">new_col</span><span class="s2">:</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+                <span class="s1">row </span><span class="s2">+= </span><span class="s1">row_step</span>
+                <span class="s1">col </span><span class="s2">+= </span><span class="s1">col_step</span>
+            <span class="s0">return True</span>
+        <span class="s0">return False</span>
+
+
+<span class="s0">class </span><span class="s1">Queen</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'Q' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'q'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли ферзь так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s4"># Ход как ладья</span>
+        <span class="s0">if </span><span class="s1">current_row </span><span class="s2">== </span><span class="s1">new_row</span><span class="s2">:  </span><span class="s4"># Ход по горизонтали</span>
+            <span class="s1">step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_col </span><span class="s2">&gt; </span><span class="s1">current_col </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s0">for </span><span class="s1">col </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">current_col </span><span class="s2">+ </span><span class="s1">step</span><span class="s2">, </span><span class="s1">new_col</span><span class="s2">, </span><span class="s1">step</span><span class="s2">):</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">current_row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+            <span class="s0">return True</span>
+        <span class="s0">elif </span><span class="s1">current_col </span><span class="s2">== </span><span class="s1">new_col</span><span class="s2">:  </span><span class="s4"># Ход по вертикали</span>
+            <span class="s1">step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_row </span><span class="s2">&gt; </span><span class="s1">current_row </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s0">for </span><span class="s1">row </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">step</span><span class="s2">, </span><span class="s1">new_row</span><span class="s2">, </span><span class="s1">step</span><span class="s2">):</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">current_col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+            <span class="s0">return True</span>
+
+        <span class="s4"># Ход как слон</span>
+        <span class="s0">if </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_row </span><span class="s2">- </span><span class="s1">current_row</span><span class="s2">) == </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_col </span><span class="s2">- </span><span class="s1">current_col</span><span class="s2">):</span>
+            <span class="s1">row_step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_row </span><span class="s2">&gt; </span><span class="s1">current_row </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s1">col_step </span><span class="s2">= </span><span class="s6">1 </span><span class="s0">if </span><span class="s1">new_col </span><span class="s2">&gt; </span><span class="s1">current_col </span><span class="s0">else </span><span class="s2">-</span><span class="s6">1</span>
+            <span class="s1">row</span><span class="s2">, </span><span class="s1">col </span><span class="s2">= </span><span class="s1">current_row </span><span class="s2">+ </span><span class="s1">row_step</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">+ </span><span class="s1">col_step</span>
+            <span class="s0">while </span><span class="s1">row </span><span class="s2">!= </span><span class="s1">new_row </span><span class="s0">and </span><span class="s1">col </span><span class="s2">!= </span><span class="s1">new_col</span><span class="s2">:</span>
+                <span class="s0">if </span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">] </span><span class="s0">is not None</span><span class="s2">:</span>
+                    <span class="s0">return False</span>
+                <span class="s1">row </span><span class="s2">+= </span><span class="s1">row_step</span>
+                <span class="s1">col </span><span class="s2">+= </span><span class="s1">col_step</span>
+            <span class="s0">return True</span>
+
+        <span class="s0">return False</span>
+
+
+<span class="s0">class </span><span class="s1">King</span><span class="s2">(</span><span class="s1">ChessPiece</span><span class="s2">):</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s1">super</span><span class="s2">().</span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">color</span><span class="s2">, </span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">symbol </span><span class="s2">= </span><span class="s3">'K' </span><span class="s0">if </span><span class="s1">color </span><span class="s2">== </span><span class="s3">'white' </span><span class="s0">else </span><span class="s3">'k'</span>
+
+    <span class="s0">def </span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">new_position</span><span class="s2">, </span><span class="s1">board</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Проверяет, может ли король так ходить. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">current_row</span><span class="s2">, </span><span class="s1">current_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s1">new_row</span><span class="s2">, </span><span class="s1">new_col </span><span class="s2">= </span><span class="s1">board</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">new_position</span><span class="s2">)</span>
+
+        <span class="s0">return </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_row </span><span class="s2">- </span><span class="s1">current_row</span><span class="s2">) &lt;= </span><span class="s6">1 </span><span class="s0">and </span><span class="s1">abs</span><span class="s2">(</span><span class="s1">new_col </span><span class="s2">- </span><span class="s1">current_col</span><span class="s2">) &lt;= </span><span class="s6">1</span>
+
+
+<span class="s0">class </span><span class="s1">ChessBoard</span><span class="s2">:</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">create_empty_board</span><span class="s2">()</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">setup_pieces</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">create_empty_board</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Создает пустую доску 8x8. 
+        &quot;&quot;&quot;</span>
+        <span class="s0">return </span><span class="s2">[[</span><span class="s0">None for </span><span class="s1">_ </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">)] </span><span class="s0">for </span><span class="s1">_ </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">)]</span>
+
+    <span class="s0">def </span><span class="s1">setup_pieces</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Расставляет фигуры в начальные позиции. 
+        &quot;&quot;&quot;</span>
+        <span class="s4"># Белые фигуры</span>
+        <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">):</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">6</span><span class="s2">][</span><span class="s1">i</span><span class="s2">] = </span><span class="s1">Pawn</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">6</span><span class="s2">, </span><span class="s1">i</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">0</span><span class="s2">] = </span><span class="s1">Rook</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">0</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">1</span><span class="s2">] = </span><span class="s1">Knight</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">1</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">2</span><span class="s2">] = </span><span class="s1">Bishop</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">2</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">3</span><span class="s2">] = </span><span class="s1">Queen</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">3</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">4</span><span class="s2">] = </span><span class="s1">King</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">4</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">5</span><span class="s2">] = </span><span class="s1">Bishop</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">5</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">6</span><span class="s2">] = </span><span class="s1">Knight</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">6</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">7</span><span class="s2">][</span><span class="s6">7</span><span class="s2">] = </span><span class="s1">Rook</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">7</span><span class="s2">, </span><span class="s6">7</span><span class="s2">))</span>
+
+        <span class="s4"># Черные фигуры</span>
+        <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">):</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">1</span><span class="s2">][</span><span class="s1">i</span><span class="s2">] = </span><span class="s1">Pawn</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">1</span><span class="s2">, </span><span class="s1">i</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">0</span><span class="s2">] = </span><span class="s1">Rook</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">0</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">1</span><span class="s2">] = </span><span class="s1">Knight</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">1</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">2</span><span class="s2">] = </span><span class="s1">Bishop</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">2</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">3</span><span class="s2">] = </span><span class="s1">Queen</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">3</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">4</span><span class="s2">] = </span><span class="s1">King</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">4</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">5</span><span class="s2">] = </span><span class="s1">Bishop</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">5</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">6</span><span class="s2">] = </span><span class="s1">Knight</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">6</span><span class="s2">))</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s6">0</span><span class="s2">][</span><span class="s6">7</span><span class="s2">] = </span><span class="s1">Rook</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">, </span><span class="s1">self</span><span class="s2">.</span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">7</span><span class="s2">))</span>
+
+    <span class="s0">def </span><span class="s1">position_to_notation</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">row</span><span class="s2">, </span><span class="s1">col</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Преобразует координаты (строка, столбец) в шахматную нотацию (например, 'a2'). 
+        &quot;&quot;&quot;</span>
+        <span class="s0">return </span><span class="s3">f'</span><span class="s0">{</span><span class="s1">chr</span><span class="s2">(</span><span class="s1">ord</span><span class="s2">(</span><span class="s3">&quot;a&quot;</span><span class="s2">) + </span><span class="s1">col</span><span class="s2">)</span><span class="s0">}{</span><span class="s6">8 </span><span class="s2">- </span><span class="s1">row</span><span class="s0">}</span><span class="s3">'</span>
+
+    <span class="s0">def </span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">notation</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Преобразует шахматную нотацию (например, 'a2') в координаты (строка, столбец). 
+        &quot;&quot;&quot;</span>
+        <span class="s1">col </span><span class="s2">= </span><span class="s1">ord</span><span class="s2">(</span><span class="s1">notation</span><span class="s2">[</span><span class="s6">0</span><span class="s2">]) - </span><span class="s1">ord</span><span class="s2">(</span><span class="s3">'a'</span><span class="s2">)</span>
+        <span class="s1">row </span><span class="s2">= </span><span class="s6">8 </span><span class="s2">- </span><span class="s1">int</span><span class="s2">(</span><span class="s1">notation</span><span class="s2">[</span><span class="s6">1</span><span class="s2">])</span>
+        <span class="s0">return </span><span class="s1">row</span><span class="s2">, </span><span class="s1">col</span>
+
+    <span class="s0">def </span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">position</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Возвращает фигуру по позиции. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">row</span><span class="s2">, </span><span class="s1">col </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">position</span><span class="s2">)</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">move_piece</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">from_pos</span><span class="s2">, </span><span class="s1">to_pos</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Перемещает фигуру с одной позиции на другую. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">piece </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">get_piece</span><span class="s2">(</span><span class="s1">from_pos</span><span class="s2">)</span>
+        <span class="s0">if </span><span class="s1">piece </span><span class="s0">and </span><span class="s1">piece</span><span class="s2">.</span><span class="s1">can_move</span><span class="s2">(</span><span class="s1">to_pos</span><span class="s2">, </span><span class="s1">self</span><span class="s2">):</span>
+            <span class="s1">from_row</span><span class="s2">, </span><span class="s1">from_col </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">from_pos</span><span class="s2">)</span>
+            <span class="s1">to_row</span><span class="s2">, </span><span class="s1">to_col </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">notation_to_position</span><span class="s2">(</span><span class="s1">to_pos</span><span class="s2">)</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">to_row</span><span class="s2">][</span><span class="s1">to_col</span><span class="s2">] = </span><span class="s1">piece</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">from_row</span><span class="s2">][</span><span class="s1">from_col</span><span class="s2">] = </span><span class="s0">None</span>
+            <span class="s1">piece</span><span class="s2">.</span><span class="s1">move</span><span class="s2">(</span><span class="s1">to_pos</span><span class="s2">)</span>
+            <span class="s0">return True</span>
+        <span class="s0">return False</span>
+
+<span class="s0">class </span><span class="s1">Game</span><span class="s2">:</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">board </span><span class="s2">= </span><span class="s1">ChessBoard</span><span class="s2">()</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">players </span><span class="s2">= [</span><span class="s1">Player</span><span class="s2">(</span><span class="s3">'white'</span><span class="s2">), </span><span class="s1">Player</span><span class="s2">(</span><span class="s3">'black'</span><span class="s2">)]</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">current_player </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">players</span><span class="s2">[</span><span class="s6">0</span><span class="s2">]</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">move_count </span><span class="s2">= </span><span class="s6">0</span>
+
+    <span class="s0">def </span><span class="s1">start</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s3">'Игра началась!'</span><span class="s2">)</span>
+        <span class="s0">while True</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">print_board</span><span class="s2">() </span><span class="s4"># Выводим доску перед каждым ходом</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s3">f'Ход игрока </span><span class="s0">{</span><span class="s1">self</span><span class="s2">.</span><span class="s1">current_player</span><span class="s2">.</span><span class="s1">color</span><span class="s0">}</span><span class="s3">'</span><span class="s2">)</span>
+            <span class="s1">from_pos </span><span class="s2">= </span><span class="s1">input</span><span class="s2">(</span><span class="s3">'Введите позицию фигуры (например: а2): '</span><span class="s2">)</span>
+            <span class="s1">to_pos </span><span class="s2">= </span><span class="s1">input</span><span class="s2">(</span><span class="s3">'Введите, куда вы хотите сходить (например: а4): ' </span><span class="s2">)</span>
+
+            <span class="s0">if </span><span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">.</span><span class="s1">move_piece</span><span class="s2">(</span><span class="s1">from_pos</span><span class="s2">, </span><span class="s1">to_pos</span><span class="s2">):</span>
+                <span class="s1">print</span><span class="s2">(</span><span class="s3">'Ход выполнен!'</span><span class="s2">)</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">move_count </span><span class="s2">+= </span><span class="s6">1</span>
+                <span class="s1">self</span><span class="s2">.</span><span class="s1">current_player </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">players</span><span class="s2">[</span><span class="s1">self</span><span class="s2">.</span><span class="s1">move_count </span><span class="s2">% </span><span class="s6">2</span><span class="s2">]</span>
+            <span class="s0">else</span><span class="s2">:</span>
+                <span class="s1">print</span><span class="s2">(</span><span class="s3">'Недопустимый ход. Попробуйте снова'</span><span class="s2">)</span>
+
+    <span class="s0">def </span><span class="s1">print_board</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s5">&quot;&quot;&quot; 
+        Выводит доску в консоль. 
+        &quot;&quot;&quot;</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;  a b c d e f g h&quot;</span><span class="s2">)  </span><span class="s4"># Подписи столбцов</span>
+        <span class="s0">for </span><span class="s1">row </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">):</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s6">8 </span><span class="s2">- </span><span class="s1">row</span><span class="s0">} </span><span class="s3">&quot;</span><span class="s2">, </span><span class="s1">end</span><span class="s2">=</span><span class="s3">&quot;&quot;</span><span class="s2">)  </span><span class="s4"># Подписи строк</span>
+            <span class="s0">for </span><span class="s1">col </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s6">8</span><span class="s2">):</span>
+                <span class="s1">piece </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">board</span><span class="s2">.</span><span class="s1">board</span><span class="s2">[</span><span class="s1">row</span><span class="s2">][</span><span class="s1">col</span><span class="s2">]</span>
+                <span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">piece</span><span class="s2">.</span><span class="s1">symbol </span><span class="s0">if </span><span class="s1">piece </span><span class="s0">else </span><span class="s3">'.'</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">, </span><span class="s1">end</span><span class="s2">=</span><span class="s3">&quot; &quot;</span><span class="s2">)  </span><span class="s4"># Символ фигуры или точка</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot; </span><span class="s0">{</span><span class="s6">8 </span><span class="s2">- </span><span class="s1">row</span><span class="s0">}</span><span class="s3">&quot;</span><span class="s2">)  </span><span class="s4"># Подписи строк справа</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;  a b c d e f g h&quot;</span><span class="s2">)  </span><span class="s4"># Подписи столбцов снизу</span>
+
+<span class="s0">class </span><span class="s1">Player</span><span class="s2">:</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">color</span><span class="s2">):</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">color </span><span class="s2">= </span><span class="s1">color  </span><span class="s4"># 'white' или 'black'</span>
+
+<span class="s0">if </span><span class="s1">__name__ </span><span class="s2">== </span><span class="s3">&quot;__main__&quot;</span><span class="s2">:</span>
+    <span class="s1">game </span><span class="s2">= </span><span class="s1">Game</span><span class="s2">()</span>
+    <span class="s1">game</span><span class="s2">.</span><span class="s1">start</span><span class="s2">()</span>
+
+
+
+</pre>
+</body>
+</html>
