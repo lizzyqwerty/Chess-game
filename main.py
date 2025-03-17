@@ -5,7 +5,6 @@
 """
 from chess_board import ChessBoard, parse_position
 
-
 def main():
     main_board = ChessBoard()
     turn = 'white'

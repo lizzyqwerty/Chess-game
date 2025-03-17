@@ -5,7 +5,6 @@
 
 from chess_pieces import Pawn, Rook, Knight, Bishop, Queen, King, Deer, Hunter, Bear
 
-
 class ChessBoard:
     """Класс шахматной доски."""
     def __init__(self):
