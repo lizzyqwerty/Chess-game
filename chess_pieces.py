@@ -158,10 +158,10 @@ class King(ChessPiece):
         return moves
 
 # Дополнительное задание - 3 новых фигуры
-class Deer(ChessPiece):
-    """Класс оленя."""
+class Buffoon(ChessPiece):
+    """Класс шута."""
     def symbol(self):
-        return 'D' if self.color == 'white' else 'd'
+        return 'F' if self.color == 'white' else 'f'
 
     def get_possible_moves(self, board):
         moves = []

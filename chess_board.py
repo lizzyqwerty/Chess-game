@@ -3,7 +3,7 @@
 Содержит класс ChessBoard, который управляет состоянием шахматной доски и перемещением фигур.
 """
 
-from chess_pieces import Pawn, Rook, Knight, Bishop, Queen, King, Deer, Hunter, Bear
+from chess_pieces import Pawn, Rook, Knight, Bishop, Queen, King, Buffoon, Hunter, Bear
 from chess_pieces import Checker, KingChecker
 
 class ChessBoard:
@@ -25,7 +25,7 @@ class ChessBoard:
         self.board[0][5] = Bishop('white', (0, 5))
         self.board[0][6] = Knight('white', (0, 6))
         self.board[0][7] = Rook('white', (0, 7))
-        self.board[2][0] = Deer('white', (2,0))
+        self.board[2][0] = Buffoon('white', (2,0))
         self.board[2][1] = Bear('white', (2, 1))
         self.board[2][7] = Hunter('white', (2, 7))
 
@@ -40,7 +40,7 @@ class ChessBoard:
         self.board[7][5] = Bishop('black', (7, 5))
         self.board[7][6] = Knight('black', (7, 6))
         self.board[7][7] = Rook('black', (7, 7))
-        self.board[5][0] = Deer('black', (5, 0))
+        self.board[5][0] = Buffoon('black', (5, 0))
         self.board[5][1] = Bear('black', (5, 1))
         self.board[5][7] = Hunter('black', (5, 7))
 
@@ -140,6 +140,17 @@ class CheckersBoard:
         self.board = [[None for _ in range(8)] for _ in range(8)]
         self.setup_pieces()
         self.move_history = []
+
+    def has_mandatory_jump(self, color):
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if piece and piece.color == color:
+                    moves = piece.get_possible_moves(self)
+                    for move in moves:
+                        if abs(move[0] - piece.position[0]) == 2:
+                            return True
+        return False
 
     def setup_pieces(self):
         for row in range(3):
