@@ -61,7 +61,6 @@ class Rook(ChessPiece):
                     break
                 if board.is_empty(new_row, new_col):
                     moves.append((new_row, new_col))
-                    break
                 elif board.has_enemy_piece(new_row, new_col, self.color):
                     moves.append((new_row, new_col))
                 else:
@@ -242,5 +241,55 @@ class Hunter(ChessPiece):
                     moves.append((new_row, new_col))
         return moves
 
+# Шашки
+class Checker(ChessPiece):
+    """Класс обычной шашки."""
+    def symbol(self):
+        return 'C' if self.color == 'white' else 'c'
 
+    def get_possible_moves(self, board):
+        moves = []
+        direction = 1 if self.color == 'white' else -1  # Белые идут вверх, черные — вниз
+        row, col = self.position
 
+        # Проверка ходов вперед по диагонали
+        for delta in [-1, 1]:
+            new_col = col + delta
+            if 0 <= new_col < 8:
+                # Обычный ход на одну клетку
+                if 0 <= row + direction < 8 and board.is_empty(row + direction, new_col):
+                    moves.append((row + direction, new_col))
+                # Прыжок через шашку противника
+                elif (0 <= row + 2 * direction < 8 and
+                      board.has_enemy_piece(row + direction, new_col, self.color) and
+                      board.is_empty(row + 2 * direction, new_col + delta)):
+                    moves.append((row + 2 * direction, new_col + delta))
+
+        return moves
+
+class KingChecker(ChessPiece):
+    """Класс дамки."""
+    def symbol(self):
+        return 'K' if self.color == 'white' else 'k'
+
+    def get_possible_moves(self, board):
+        moves = []
+        directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]  # Все диагонали
+        row, col = self.position
+
+        for d_row, d_col in directions:
+            for i in range(1, 8):
+                new_row, new_col = row + i * d_row, col + i * d_col
+                if not (0 <= new_row < 8 and 0 <= new_col < 8):
+                    break
+                if board.is_empty(new_row, new_col):
+                    moves.append((new_row, new_col))
+                elif board.has_enemy_piece(new_row, new_col, self.color):
+                    # Прыжок через шашку противника
+                    jump_row, jump_col = new_row + d_row, new_col + d_col
+                    if 0 <= jump_row < 8 and 0 <= jump_col < 8 and board.is_empty(jump_row, jump_col):
+                        moves.append((jump_row, jump_col))
+                    break
+                else:
+                    break
+        return moves

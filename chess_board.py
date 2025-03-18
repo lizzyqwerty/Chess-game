@@ -4,6 +4,7 @@
 """
 
 from chess_pieces import Pawn, Rook, Knight, Bishop, Queen, King, Deer, Hunter, Bear
+from chess_pieces import Checker, KingChecker
 
 class ChessBoard:
     """Класс шахматной доски."""
@@ -102,6 +103,7 @@ class ChessBoard:
             self.board[from_pos[0]][from_pos[1]] = piece
             self.board[to_pos[0]][to_pos[1]] = captured_piece
             piece.position = old_position
+            return False
 
         self.move_history.append((from_pos, to_pos, captured_piece))
         return True
@@ -132,6 +134,95 @@ def parse_position(pos_str):
         return (row, col)
     return None
 
+class CheckersBoard:
+    """Класс доски для шашек"""
+    def __init__(self):
+        self.board = [[None for _ in range(8)] for _ in range(8)]
+        self.setup_pieces()
+        self.move_history = []
+
+    def setup_pieces(self):
+        for row in range(3):
+            for col in range(8):
+                if (row + col) % 2 == 1:  # Черные клетки
+                    self.board[row][col] = Checker('white', (row, col))
+        # Расстановка черных шашек (последние 3 ряда, черные клетки)
+        for row in range(5, 8):
+            for col in range(8):
+                if (row + col) % 2 == 1:  # Черные клетки
+                    self.board[row][col] = Checker('black', (row, col))
+
+    def display(self):
+        print('  a b c d e f g h')
+        for row in range(7, -1, -1):
+            print(f'{row + 1} ', end='')
+            for col in range(8):
+                piece = self.board[row][col]
+                print(piece.symbol() if piece else '.', end=' ')
+            print(f'{row + 1}')
+        print('  a b c d e f g h')
+
+    def is_empty(self, row, col):
+        return self.board[row][col] is None
+
+    def has_enemy_piece(self, row, col, color):
+        piece = self.board[row][col]
+        return piece is not None and piece.color != color
+
+    def promote_to_king(self, piece):
+        """Превращение шашки в дамку."""
+        if piece.color == 'white' and piece.position[0] == 7:
+            self.board[piece.position[0]][piece.position[1]] = KingChecker(piece.color, piece.position)
+        elif piece.color == 'black' and piece.position[0] == 0:
+            self.board[piece.position[0]][piece.position[1]] = KingChecker(piece.color, piece.position)
+
+    def move_piece(self, from_pos, to_pos):
+        """Перемещение шашки с учетом прыжков и превращения в дамку."""
+        piece = self.board[from_pos[0]][from_pos[1]]
+        if not piece or to_pos not in piece.get_possible_moves(self):
+            return False
+
+        # Проверка на прыжок
+        if abs(from_pos[0] - to_pos[0]) == 2:
+            mid_row = (from_pos[0] + to_pos[0]) // 2
+            mid_col = (from_pos[1] + to_pos[1]) // 2
+            self.board[mid_row][mid_col] = None  # Удаляем шашку противника
+
+        self.board[to_pos[0]][to_pos[1]] = piece
+        self.board[from_pos[0]][from_pos[1]] = None
+        piece.position = to_pos
+
+        # Превращение в дамку
+        self.promote_to_king(piece)
+
+        self.move_history.append((from_pos, to_pos))
+        return True
+
+    def undo_move(self):
+        if not self.move_history:
+            print('Нет ходов для отката')
+            return False
+
+        from_pos, to_pos = self.move_history.pop()
+        piece = self.board[to_pos[0]][to_pos[1]]
+        self.board[from_pos[0]][from_pos[1]] = piece
+        self.board[to_pos[0]][to_pos[1]] = None
+        piece.position = from_pos
+        return True
+
+    def is_game_over(self):
+        """Проверка окончания игры."""
+        white_pieces = 0
+        black_pieces = 0
+        for row in range(8):
+            for col in range(8):
+                piece = self.board[row][col]
+                if piece:
+                    if piece.color == 'white':
+                        white_pieces += 1
+                    else:
+                        black_pieces += 1
+        return white_pieces == 0 or black_pieces == 0  # Один из игроков потерял все шашки
 
 
 
